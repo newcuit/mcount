@@ -15,5 +15,9 @@ ${DEPEND2}.o:mcount.c
 sym:
 	objdump -axd ${OBJ} > ${OBJ}.s
 
+arm:
+	${CC} -c  arm_mcount.c -o mcount.o
+	ar -r libmcount.a mcount.o
+
 clean:
 	rm -rf ${DEPEND1}.o ${DEPEND2}.o ${OBJ} 
