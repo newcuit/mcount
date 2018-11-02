@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define GNU_MAX_CALL_COUNT 100
 #define likely(x) __builtin_expect(!!(x), 1)
@@ -34,13 +35,15 @@ int mcount_show(mcount_show_t cb)
 {
 	int cnt = 0;
 	int i = call_idx%GNU_MAX_CALL_COUNT;
+	int address[GNU_MAX_CALL_COUNT];
 
+	memcpy(address, save_address, sizeof(int)*GNU_MAX_CALL_COUNT);
 	for (; cnt < GNU_MAX_CALL_COUNT;cnt++) {
 		if(likely(cb != NULL)) {
-			cb(save_address[i++%GNU_MAX_CALL_COUNT]);
+			cb(address[i++%GNU_MAX_CALL_COUNT]);
 		} else {
 			printf("Function called by %08x\n", 
-					save_address[i++%GNU_MAX_CALL_COUNT]);
+					address[i++%GNU_MAX_CALL_COUNT]);
 		}
 	}
 	return 0;
